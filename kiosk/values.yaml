@@ -7,7 +7,7 @@ X11:
     repository: registry.suse.com/suse/kiosk/xorg
     pullPolicy: Always
     # Overrides the image tag whose default is the chart appVersion.
-    tag: "21.1"
+    tag: "21.1-83.2"   # Pin to build containing input-hotplug fix
   # Configuration to override the keyboard mapping using xmodmap.
   keyboardModMap: null
   # Configuration to override the keyboard layout using xkb.
