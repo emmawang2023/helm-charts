@@ -39,6 +39,8 @@ spec:
               name: xauthority
             - mountPath: /run/udev/data/
               name: udev-data
+            - mountPath: /dev/input
+              name: dev-input
             {{- with .Values.X11.keyboardModMap }}
             - mountPath: /root/.Xmodmap
               subPath: .Xmodmap
@@ -224,6 +226,10 @@ spec:
         - name: udev-data
           hostPath:
             path: /run/udev/data/
+            type: Directory
+        - name: dev-input
+          hostPath:
+            path: /dev/input
             type: Directory
         {{- with .Values.X11.keyboardModMap }}
         - name: xmodmap
