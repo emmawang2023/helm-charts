@@ -9,8 +9,17 @@ X11:
     # Overrides the image tag whose default is the chart appVersion.
     tag: "21.1"
   # Configuration to override the keyboard mapping using xmodmap.
+  #
+  # NOTE: xmodmap is applied once, at session start, to the keyboards present at
+  # that moment. It is not reapplied when an input device is connected or
+  # re-enumerated, so a keyboard plugged in later - or unplugged and plugged back
+  # in - reverts to the stock mapping until the pod restarts. Use
+  # customKeyboardLayout for mappings that must survive a replug. The two cannot
+  # be set together; the chart refuses to render if both are set.
   keyboardModMap: null
   # Configuration to override the keyboard layout using xkb.
+  # Xorg applies this to each keyboard as the device is added, so it survives
+  # hotplug and replug.
   customKeyboardLayout: null
   # Add additional commands prior to startx (such as xrandr).
   xinitrcOverride: null
