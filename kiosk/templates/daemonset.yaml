@@ -54,6 +54,10 @@ spec:
             - name: xkb-config
               mountPath: /usr/share/X11/xkb/symbols/custom_layout
               subPath: custom_layout
+            # Without this drop-in the symbols file is never selected by Xorg.
+            - name: xkb-config
+              mountPath: /etc/X11/xorg.conf.d/95-kiosk-layout.conf
+              subPath: 95-kiosk-layout.conf
             {{- end }}
             {{- with .Values.X11.customBackgroundConfigMap }}
             - name: custom-background
@@ -144,11 +148,6 @@ spec:
             - mountPath: /dev/shm
               name: shm
             {{- end }}
-            {{- with .Values.X11.customKeyboardLayout }}
-            - name: xkb-config
-              configMap:
-                name: xkb-config
-            {{- end }}
           {{- with .Values.workload.startupProbe }}
           startupProbe:
             {{- toYaml . | nindent 12 }}
@@ -231,6 +230,11 @@ spec:
           hostPath:
             path: /dev/input
             type: Directory
+        {{- with .Values.X11.customKeyboardLayout }}
+        - name: xkb-config
+          configMap:
+            name: xkb-config
+        {{- end }}
         {{- with .Values.X11.keyboardModMap }}
         - name: xmodmap
           configMap:

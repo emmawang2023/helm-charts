@@ -1,3 +1,6 @@
+{{- if and .Values.X11.keyboardModMap .Values.X11.customKeyboardLayout }}
+{{- fail "Set X11.keyboardModMap or X11.customKeyboardLayout, not both: xmodmap is lost on replug (see values.yaml)" }}
+{{- end }}
 {{- with .Values.X11.keyboardModMap }}
 apiVersion: v1
 kind: ConfigMap
@@ -8,6 +11,7 @@ data:
   {{- toYaml . | nindent 4 }}
 {{- end }}
 {{- with .Values.X11.customKeyboardLayout }}
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -15,4 +19,12 @@ metadata:
 data:
   custom_layout:
     {{- toYaml . | nindent 4 }}
+  # InputClass drop-in: applies the layout to every keyboard as it is added,
+  # including devices that appear after Xorg started.
+  95-kiosk-layout.conf: |
+    Section "InputClass"
+        Identifier "kiosk custom layout"
+        MatchIsKeyboard "on"
+        Option "XkbLayout" "custom_layout"
+    EndSection
 {{- end }}
