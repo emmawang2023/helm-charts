@@ -8,6 +8,7 @@ X11:
     pullPolicy: Always
     # Overrides the image tag whose default is the chart appVersion.
     tag: "21.1"
+  # DEPRECATED: use customKeyboardLayout, which survives hotplug (bsc#1271914).
   # Configuration to override the keyboard mapping using xmodmap.
   #
   # NOTE: xmodmap is applied once, at session start, to the keyboards present at
