@@ -1,1 +1,12 @@
 Your Kiosk application is running using the container: {{ .Values.workload.image.repository }}:{{ .Values.workload.image.tag }}
+{{ if .Values.X11.keyboardModMap }}
+WARNING: X11.keyboardModMap is deprecated. Use X11.customKeyboardLayout, which
+survives input hotplug.
+{{ end }}
+{{- if and .Values.X11.xinitrcOverride .Values.X11.customKeyboardLayout }}
+NOTE: an xmodmap call in your xinitrcOverride will override the xkb layout.
+{{ end }}
+{{- if or .Values.X11.customKeyboardLayout .Values.X11.keyboardModMap .Values.X11.xinitrcOverride .Values.X11.customBackgroundConfigMap }}
+NOTE: changing these values needs a pod restart:
+kubectl rollout restart ds/{{ include "kiosk.fullname" . }}
+{{ end }}
